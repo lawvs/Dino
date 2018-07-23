@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './styles.css'
 
-import Runner from '../Runner'
+import Game from '../Game'
 import MessageCard from '../MessageCard'
 
 class App extends Component {
@@ -9,7 +9,7 @@ class App extends Component {
         return (
             <div className='container'>
                 <div className='wrapper'>
-                    <Runner />
+                    <Game />
                     <MessageCard />
                 </div>
             </div>
