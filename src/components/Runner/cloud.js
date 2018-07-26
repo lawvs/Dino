@@ -26,11 +26,8 @@ class Cloud {
     config = {
         /** @type {Array | string} */
         IMG_SRC: [defaultCloudImg],
-        IMG_WIDTH: null,
-        IMG_HEIGHT: null,
         X_POS: null, // initial x position
         Y_POS: null, // initial y position
-        SPEED: 0, // cloud speed
         MAX_SKY_LEVEL: null,
         MIN_SKY_LEVEL: null,
     };
@@ -42,6 +39,7 @@ class Cloud {
      */
     constructor(canvas, options={}) {
         if (!canvas) {
+            // this.remove = true
             throw new Error('the parameter canvas is required!')
         }
         this.canvas = canvas
@@ -55,10 +53,8 @@ class Cloud {
         if (!this.img) {
             throw new Error(`load cloud image fail! IMG_SRC: ${this.config.IMG_SRC}`)
         }
-        this.config.IMG_WIDTH = this.img.width,
-        this.config.IMG_HEIGHT = this.img.height,
-        this.config.MAX_SKY_LEVEL = this.config.IMG_HEIGHT
-        this.config.MIN_SKY_LEVEL = this.canvas.height / 2
+        this.config.MAX_SKY_LEVEL = this.config.MAX_SKY_LEVEL || this.img.height
+        this.config.MIN_SKY_LEVEL = this.config.MIN_SKY_LEVEL || this.canvas.height / 2 - this.img.height
 
         this.xPos = this.config.X_POS || this.canvas.width
         this.yPos = this.config.Y_POS || random(
@@ -82,14 +78,14 @@ class Cloud {
 
     /**
      * update the cloud position
-     * @param {number} [speed=0]
+     * @param {number} [distance=0]
      */
-    update(speed=0) {
+    update(distance=0) {
         if (this.remove) {
             return
         }
 
-        this.xPos += speed
+        this.xPos += distance
         if (!this.isVisible()) {
             this.remove = true
             return
@@ -102,7 +98,7 @@ class Cloud {
      * @return {boolean}
      */
     isVisible() {
-        return this.xPos + this.config.IMG_WIDTH >= 0
+        return this.xPos + this.img.width >= 0
             && this.xPos <= this.canvas.width
     }
 }
