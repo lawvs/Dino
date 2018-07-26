@@ -1,0 +1,95 @@
+// @ts-check
+import { random } from 'lodash'
+
+import Cloud from './cloud'
+
+class CloudManager {
+    /** @type {!HTMLCanvasElement} */
+    canvas
+    /** @type {!CanvasRenderingContext2D} */
+    canvasCtx
+    /** @type {Cloud[]} */
+    cloudList = []
+    /** @type {number} */
+    currentGap = 0
+    /** @type {?Cloud} */
+    lastCloud
+    /** @type {object} */
+    config = {
+        MIN_CLOUD_AMOUNT: 0,
+        MAX_CLOUD_AMOUNT: Infinity,
+        MAX_CLOUD_GAP: null, // this.canvas.width / 1
+        MIN_CLOUD_GAP: null, // this.canvas.width / 4
+        CLOUD_FREQUENCY: 0.1,
+    }
+
+    /**
+     * @param {HTMLCanvasElement} canvas
+     * @param {object} [options={}]
+     * @constructs Clouds
+     */
+    constructor(canvas, options={}) {
+        if (!canvas) {
+            throw new Error('the parameter canvas is required!')
+        }
+        this.canvas = canvas
+        this.canvasCtx = this.canvas.getContext('2d')
+
+        this.config.MAX_CLOUD_GAP = this.canvas.width / 1
+        this.config.MIN_CLOUD_GAP = this.canvas.width / 4
+        this.config = {
+            ...this.config,
+            ...options,
+        }
+    }
+
+    update(distance) {
+        if (this.needToAddCloud()) {
+            this.addCloud()
+        }
+        this.cloudList = this.cloudList.filter(cloud => cloud && !cloud.remove)
+        this.cloudList.forEach(cloud => cloud.update(distance))
+    }
+
+    /**
+     * @return {boolean}
+     */
+    needToAddCloud() {
+        const num = this.cloudList.length
+        // cloud collision
+        const gapDistance = this.lastCloud ?
+            this.canvas.width - this.lastCloud.xPos + this.lastCloud.img.width :
+            Infinity
+        if (gapDistance < 0) {
+            return false
+        }
+        if (num < this.config.MIN_CLOUD_AMOUNT) {
+            return true
+        }
+        if (num > this.config.MAX_CLOUD_AMOUNT) {
+            return false
+        }
+        if (gapDistance > this.currentGap && this.config.CLOUD_FREQUENCY > Math.random()) {
+            return true
+        }
+        return false
+    }
+
+    addCloud(options={}) {
+        const cloud = new Cloud(this.canvas, options)
+        this.cloudList.push(cloud)
+        this.lastCloud = cloud
+        this.currentGap = random(
+            this.config.MIN_CLOUD_GAP,
+            this.config.MAX_CLOUD_GAP
+        )
+    }
+
+    reset() {
+        this.cloudList = []
+        this.currentGap = 0
+        this.lastCloud = null
+    }
+}
+
+export default CloudManager
