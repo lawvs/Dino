@@ -1,3 +1,5 @@
+// @ts-check
+/// <reference path='./index.d.ts'/>
 import cloudImg from './images/cloud.png'
 
 /**
