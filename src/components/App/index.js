@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import './styles.css'
 
 import Game from '../Game'
 import MessageCard from '../MessageCard'
+import './styles.css'
 
 class App extends Component {
     render() {

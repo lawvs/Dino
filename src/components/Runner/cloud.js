@@ -1,6 +1,6 @@
 // @ts-check
 /// <reference path='./index.d.ts'/>
-import { random, castArray, sample } from 'lodash'
+import { castArray, random, sample } from 'lodash'
 
 import imageMap from './imageLoader'
 import defaultCloudImg from './images/cloud.png'
