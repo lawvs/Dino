@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
+
+import { Runner } from '../Runner'
 import './styles.css'
 
-import Runner from '../Runner'
 
 class App extends Component {
     constructor(props) {
@@ -16,7 +17,8 @@ class App extends Component {
             id: 'runner',
             width: this.outerContainerEl.offsetWidth,
         }
-        new Runner(this.outerContainerEl, config)
+        const runner = new Runner(this.outerContainerEl, config)
+        runner.init()
     }
 
     render() {
