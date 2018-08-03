@@ -1,6 +1,7 @@
 // @ts-check
 /// <reference path='./index.d.ts'/>
 import cloudImg from './images/cloud.png'
+import tRexImg from './images/trex.png'
 
 /**
  * URL to load
@@ -8,6 +9,7 @@ import cloudImg from './images/cloud.png'
  */
 const imageArray = [
     cloudImg,
+    tRexImg,
 ]
 
 /**
