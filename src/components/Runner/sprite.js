@@ -9,9 +9,11 @@ class Sprite {
     /** @type {!CanvasRenderingContext2D} */
     canvasCtx
     /** @type {number} */
-    xPos
+    xPos = 0
     /** @type {number} */
-    yPos
+    yPos = 0
+    /** @type {number} */
+    speed = 0
     /** @type {HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap} */
     _img
     /** @type {HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap} */
@@ -49,8 +51,6 @@ class Sprite {
         }
         this.canvas = canvas
         this.canvasCtx = this.canvas.getContext('2d')
-        this.xPos = this.config.X_POS
-        this.yPos = this.config.Y_POS
     }
 
     draw() {
