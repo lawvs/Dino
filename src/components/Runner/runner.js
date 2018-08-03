@@ -1,7 +1,7 @@
 // @ts-check
 import CloudManager from './cloudManager'
 import { loadImages } from './imageLoader'
-import Trex from './tRex'
+import Trex from './trex'
 
 /**
  * T-Rex runner.
@@ -24,6 +24,10 @@ class Runner {
     reqId
     /** @type {number} */
     time
+    /** @type {boolean} */
+    isPlay = false
+    /** @type {Map} */
+    keyMap = new Map()
 
     /** @type {object} */
     config = {
@@ -35,6 +39,7 @@ class Runner {
         ACCELERATION: 0.001,
         MAX_SPEED: 13,
         GRAVITY: 0.6,
+        KEYCODE_JUMP: 'Space',
     }
 
     /**
@@ -64,8 +69,10 @@ class Runner {
         this.canvas.height = HEIGHT
         this.canvasCtx = this.canvas.getContext('2d')
 
-        this.drawBackGround()
         this.currentSpeed = INIT_SPEED
+
+        // background
+        this.drawBackGround()
         // clouds
         this.cloudManager = new CloudManager(this.canvas)
         // ground
@@ -75,7 +82,41 @@ class Runner {
         this.tRex = new Trex(this.canvas)
 
         this.outerContainerEl.appendChild(this.canvas)
+        this.startListening()
         this.update()
+    }
+
+    startListening() {
+        document.addEventListener('keydown', e => this.onKeyDown(e))
+        // document.addEventListener('keyup', e => this.onKeyUp(e))
+    }
+
+    /** @param {KeyboardEvent} e */
+    onKeyDown(e) {
+        this.keyMap.set(e.code, true)
+        event.preventDefault()
+    }
+
+    /** @param {KeyboardEvent} e */
+    onKeyUp(e) {
+        this.keyMap.delete(e.code)
+        e.preventDefault()
+    }
+
+    handleKey() {
+        this.keyMap.forEach((value, key) => {
+            switch (key) {
+            case this.config.KEYCODE_JUMP:
+                if (!this.isPlay) {
+                    this.restart()
+                }
+                this.tRex.jump()
+                break
+            default:
+                break
+            }
+        })
+        this.keyMap.clear()
     }
 
     update() {
@@ -86,15 +127,24 @@ class Runner {
         this.time = now
         const deltadDistance = this.currentSpeed * deltaTime
 
-        this.canvasCtx.clearRect(0, 0, this.config.WIDTH, this.config.HEIGHT)
-        this.drawBackGround()
-        this.cloudManager.update(-1 * deltadDistance)
-        this.tRex.update()
+        this.handleKey()
+        if (this.isPlay) {
+            this.canvasCtx.clearRect(0, 0, this.config.WIDTH, this.config.HEIGHT)
+            // draw
+            this.drawBackGround()
+            this.cloudManager.update(-1 * deltadDistance)
+            this.tRex.update(deltaTime)
+        }
 
         if (!this.updatePending) {
             this.updatePending = true
             this.reqId = requestAnimationFrame(this.update.bind(this))
         }
+    }
+
+    restart() {
+        this.isPlay = true
+        this.keyMap.clear()
     }
 
     drawBackGround() {
