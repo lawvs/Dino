@@ -21,6 +21,7 @@ class CloudManager {
         MAX_CLOUD_GAP: null, // this.canvas.width / 1
         MIN_CLOUD_GAP: null, // this.canvas.width / 4
         CLOUD_FREQUENCY: 0.1,
+        CLOUD_CONFIG: {},
     }
 
     /**
@@ -28,7 +29,7 @@ class CloudManager {
      * @param {object} [options={}]
      * @constructs Clouds
      */
-    constructor(canvas, options={}) {
+    constructor(canvas, options = {}) {
         if (!canvas) {
             throw new Error('the parameter canvas is required!')
         }
@@ -45,7 +46,7 @@ class CloudManager {
 
     update(distance) {
         if (this.needToAddCloud()) {
-            this.addCloud()
+            this.addCloud(this.config.CLOUD_CONFIG)
         }
         this.cloudList = this.cloudList.filter(cloud => cloud && !cloud.remove)
         this.cloudList.forEach(cloud => cloud.update(distance))
@@ -57,9 +58,9 @@ class CloudManager {
     needToAddCloud() {
         const num = this.cloudList.length
         // cloud collision
-        const gapDistance = this.lastCloud ?
-            this.canvas.width - this.lastCloud.xPos + this.lastCloud.img.width :
-            Infinity
+        const gapDistance = this.lastCloud
+            ? this.canvas.width - this.lastCloud.xPos + this.lastCloud.img.width
+            : Infinity
         if (gapDistance < 0) {
             return false
         }
@@ -69,13 +70,16 @@ class CloudManager {
         if (num > this.config.MAX_CLOUD_AMOUNT) {
             return false
         }
-        if (gapDistance > this.currentGap && this.config.CLOUD_FREQUENCY > Math.random()) {
+        if (
+            gapDistance > this.currentGap &&
+            this.config.CLOUD_FREQUENCY > Math.random()
+        ) {
             return true
         }
         return false
     }
 
-    addCloud(options={}) {
+    addCloud(options = {}) {
         const cloud = new Cloud(this.canvas, options)
         this.cloudList.push(cloud)
         this.lastCloud = cloud

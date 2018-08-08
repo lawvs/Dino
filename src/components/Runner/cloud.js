@@ -18,7 +18,7 @@ class Cloud extends Sprite {
         IMG_SRC: defaultCloudImg,
         MAX_SKY_LEVEL: null,
         MIN_SKY_LEVEL: null,
-    };
+    }
 
     /**
      * @param {HTMLCanvasElement} canvas
@@ -31,14 +31,16 @@ class Cloud extends Sprite {
             ...this.config,
             ...options,
         }
-        isNumber(this.config.MAX_SKY_LEVEL) || (this.config.MAX_SKY_LEVEL = this.img.height)
-        isNumber(this.config.MIN_SKY_LEVEL) || (this.config.MIN_SKY_LEVEL = this.canvas.height / 2 - this.img.height)
+        isNumber(this.config.MAX_SKY_LEVEL) ||
+            (this.config.MAX_SKY_LEVEL = this.img.height)
+        isNumber(this.config.MIN_SKY_LEVEL) ||
+            (this.config.MIN_SKY_LEVEL =
+                this.canvas.height / 2 - this.img.height)
 
         this.xPos = this.config.X_POS || this.canvas.width
-        this.yPos = this.config.Y_POS || random(
-            this.config.MAX_SKY_LEVEL,
-            this.config.MIN_SKY_LEVEL
-        )
+        this.yPos =
+            this.config.Y_POS ||
+            random(this.config.MAX_SKY_LEVEL, this.config.MIN_SKY_LEVEL)
     }
 
     /**
@@ -46,11 +48,7 @@ class Cloud extends Sprite {
      */
     draw() {
         this.canvasCtx.save()
-        this.canvasCtx.drawImage(
-            this.img,
-            this.xPos,
-            this.yPos,
-        )
+        this.canvasCtx.drawImage(this.img, this.xPos, this.yPos)
         this.canvasCtx.restore()
     }
 
@@ -58,7 +56,7 @@ class Cloud extends Sprite {
      * update the cloud position
      * @param {number} [distance=0]
      */
-    update(distance=0) {
+    update(distance = 0) {
         if (this.remove) {
             return
         }
@@ -76,8 +74,7 @@ class Cloud extends Sprite {
      * @return {boolean}
      */
     isVisible() {
-        return this.xPos + this.img.width >= 0
-            && this.xPos <= this.canvas.width
+        return this.xPos + this.img.width >= 0 && this.xPos <= this.canvas.width
     }
 }
 

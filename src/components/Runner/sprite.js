@@ -18,7 +18,8 @@ class Sprite {
     _img
     /** @type {HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap} */
     get img() {
-        if (this._img) { // loaded
+        // loaded
+        if (this._img) {
             return this._img
         }
         this.config.IMG_SRC = castArray(this.config.IMG_SRC)
@@ -38,14 +39,14 @@ class Sprite {
         IMG_SRC: null, // todo override
         X_POS: 0, // initial x position
         Y_POS: 0, // initial y position
-    };
+    }
 
     /**
      * @param {HTMLCanvasElement} canvas
      * @param {object} [options={}]
      * @constructs Trex
      */
-    constructor(canvas, options={}) {
+    constructor(canvas, options = {}) {
         if (!canvas) {
             throw new Error('the parameter canvas is required!')
         }
@@ -55,18 +56,13 @@ class Sprite {
 
     draw() {
         this.canvasCtx.save()
-        this.canvasCtx.drawImage(
-            this.img,
-            this.xPos,
-            this.yPos,
-        )
+        this.canvasCtx.drawImage(this.img, this.xPos, this.yPos)
         this.canvasCtx.restore()
     }
 
     update() {
         this.draw()
     }
-
 }
 
 export default Sprite
