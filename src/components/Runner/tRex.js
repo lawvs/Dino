@@ -1,3 +1,5 @@
+// @ts-check
+/// <reference path='./index.d.ts'/>
 import Sprite from './sprite'
 import defaultTrexImg from './images/trex.png'
 
@@ -11,10 +13,12 @@ class Trex extends Sprite {
 
     /**
      * object config
-     * @type {{IMG_SRC: Array | string, GROUND_YPOS: number}}
+     * @type {{IMG_SRC: Array | string, X_POS: number, Y_POS: number, GROUND_HEIGHT: number, GRAVITY: number, JUMP_SPEED: number}}
      */
     config = {
-        IMG_SRC: [defaultTrexImg],
+        IMG_SRC: defaultTrexImg,
+        X_POS: null,
+        Y_POS: null,
         GROUND_HEIGHT: 20,
         GRAVITY: 1500,
         JUMP_SPEED: 450,
@@ -27,7 +31,6 @@ class Trex extends Sprite {
      */
     constructor(canvas, options = {}) {
         super(canvas, options)
-        this.config.GROUND_YPOS = this.canvas.height
         this.config = {
             ...this.config,
             ...options,
@@ -39,6 +42,9 @@ class Trex extends Sprite {
         this.yPos = this.groundY
     }
 
+    /**
+     * @param {number}
+     */
     update(deltaTime) {
         // jump
         if (this.isJump) {
@@ -54,7 +60,7 @@ class Trex extends Sprite {
     }
 
     /**
-     * @param {number} [spee1d=this.config.JUMP_SPEED]
+     * @param {number} [speed=this.config.JUMP_SPEED]
      */
     jump(speed = this.config.JUMP_SPEED) {
         if (this.isJump) {
