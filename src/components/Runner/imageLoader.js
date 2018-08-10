@@ -2,15 +2,13 @@
 /// <reference path='./index.d.ts'/>
 import cloudImg from './images/cloud.png'
 import tRexImg from './images/trex.png'
+import groundImg from './images/ground.png'
 
 /**
  * URL to load
  * @type {string[]} img url array
  */
-const imageArray = [
-    cloudImg,
-    tRexImg,
-]
+const imageArray = [cloudImg, tRexImg, groundImg]
 
 /**
  * @type {Map<string, HTMLImageElement>}
