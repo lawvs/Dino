@@ -11,11 +11,12 @@ class Cloud extends Sprite {
 
     /**
      * cloud object config
-     * @type {object}
+     * @type {{IMG_SRC: Array | string, X_POS: number, Y_POS: number, MAX_SKY_LEVEL: number, MIN_SKY_LEVEL: number}}
      */
     config = {
-        /** @type {Array | string} */
         IMG_SRC: defaultCloudImg,
+        X_POS: null,
+        Y_POS: null,
         MAX_SKY_LEVEL: null,
         MIN_SKY_LEVEL: null,
     }
@@ -67,14 +68,6 @@ class Cloud extends Sprite {
             return
         }
         this.draw()
-    }
-
-    /**
-     * check if the cloud is visible on the stage
-     * @return {boolean}
-     */
-    isVisible() {
-        return this.xPos + this.img.width >= 0 && this.xPos <= this.canvas.width
     }
 }
 

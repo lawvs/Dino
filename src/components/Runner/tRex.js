@@ -37,15 +37,15 @@ class Trex extends Sprite {
         }
         this.xPos = this.config.X_POS || 0
         this.groundY =
-            this.config.Y_POS ||
             this.canvas.height - this.img.height - this.config.GROUND_HEIGHT
         this.yPos = this.groundY
     }
 
     /**
-     * @param {number}
+     * update the cloud position
+     * @param {number} [deltaTime = 1 / 16]
      */
-    update(deltaTime) {
+    update(deltaTime = 1 / 16) {
         // jump
         if (this.isJump) {
             this.yPos -= this.jumpVelocity * deltaTime

@@ -27,7 +27,7 @@ class CloudManager {
     /**
      * @param {HTMLCanvasElement} canvas
      * @param {object} [options={}]
-     * @constructs Clouds
+     * @constructs CloudManager
      */
     constructor(canvas, options = {}) {
         if (!canvas) {
