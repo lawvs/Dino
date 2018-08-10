@@ -12,6 +12,8 @@ class Sprite {
     xPos = 0
     /** @type {number} */
     yPos = 0
+    /** @type {boolean} */
+    remove = false
     /** @type {number} */
     speed = 0
     /** @type {HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap} */
@@ -61,7 +63,24 @@ class Sprite {
     }
 
     update() {
+        if (!this.isVisible()) {
+            this.remove = true
+            return
+        }
         this.draw()
+    }
+
+    /**
+     * check if the sprite is visible on the stage
+     * @return {boolean}
+     */
+    isVisible() {
+        return (
+            this.xPos + this.img.width >= 0 &&
+            this.xPos <= this.canvas.width &&
+            this.yPos + this.img.height >= 0 &&
+            this.yPos <= this.canvas.height
+        )
     }
 }
 
