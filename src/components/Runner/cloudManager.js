@@ -44,12 +44,12 @@ class CloudManager {
         }
     }
 
-    update(distance) {
+    update(deltaTime, speed) {
         if (this.needToAddCloud()) {
             this.addCloud(this.config.CLOUD_CONFIG)
         }
         this.cloudList = this.cloudList.filter(cloud => cloud && !cloud.remove)
-        this.cloudList.forEach(cloud => cloud.update(distance))
+        this.cloudList.forEach(cloud => cloud.update(deltaTime, speed))
     }
 
     /**

@@ -11,7 +11,7 @@ class Cloud extends Sprite {
 
     /**
      * cloud object config
-     * @type {{IMG_SRC: Array | string, X_POS: number, Y_POS: number, MAX_SKY_LEVEL: number, MIN_SKY_LEVEL: number}}
+     * @type {{IMG_SRC: Array | string, X_POS: number, Y_POS: number, MAX_SKY_LEVEL: number, MIN_SKY_LEVEL: number, RATIO: number, SPEED: number}}
      */
     config = {
         IMG_SRC: defaultCloudImg,
@@ -19,6 +19,9 @@ class Cloud extends Sprite {
         Y_POS: null,
         MAX_SKY_LEVEL: null,
         MIN_SKY_LEVEL: null,
+        SPEED: 0, // cloud speed
+        // outside world speed ratio. When RATIO is zero, the external speed will not affect the speed of the cloud itself
+        RATIO: 0.3,
     }
 
     /**
@@ -55,14 +58,19 @@ class Cloud extends Sprite {
 
     /**
      * update the cloud position
-     * @param {number} [distance=0]
+     * @param {number} [deltaTime=1/16]
+     * @param {number} [speed=0]
      */
-    update(distance = 0) {
+    update(deltaTime = 1 / 16, speed = 0) {
         if (this.remove) {
             return
         }
+        // calc cloud movement distance
+        const distance =
+            deltaTime * speed * this.config.RATIO +
+            deltaTime * this.config.SPEED
 
-        this.xPos += distance
+        this.xPos -= distance
         if (!this.isVisible()) {
             this.remove = true
             return
