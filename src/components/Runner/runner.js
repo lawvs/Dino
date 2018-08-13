@@ -2,6 +2,7 @@
 import CloudManager from './cloudManager'
 import { loadImages } from './imageLoader'
 import Trex from './trex'
+import GroundManager from './groundManager'
 
 /**
  * T-Rex runner.
@@ -16,29 +17,36 @@ class Runner {
     canvasCtx
     /** @type {CloudManager} */
     cloudManager
+    /** @type {GroundManager} */
+    groundManager
     /** @type {Trex} */
     tRex
     /** @type {number} */
     currentSpeed
-    /** @type {number} */
+    /** @type {number} requestAnimationFrame */
     reqId
-    /** @type {number} */
+    /** @type {number?} calc frame rate /second */
     time
+    /** @type {number} for speed update /second */
+    accelerationTime = 0
     /** @type {boolean} */
     isPlay = false
+    /** @type {number} */
+    distanceRan = 0
     /** @type {Map} */
     keyMap = new Map()
 
-    /** @type {object} */
+    /** @type {{ID: string, WIDTH: number, HEIGHT: number, BG_COLOR: string, INIT_SPEED: number, ACCELERATION: number, ACCELERATION_INTERVAL: number, MAX_SPEED: number, KEYCODE_JUMP: string}} */
     config = {
         ID: '', // canvas id
         WIDTH: 600,
         HEIGHT: 150,
         BG_COLOR: '', // canvas background
-        INIT_SPEED: 6,
-        ACCELERATION: 0.001,
-        MAX_SPEED: 13,
-        GRAVITY: 0.6,
+        INIT_SPEED: 200, // pixel/s
+        ACCELERATION: 5,
+        ACCELERATION_INTERVAL: 1, // s
+        MAX_SPEED: 800,
+        // event.code
         KEYCODE_JUMP: 'Space',
     }
 
@@ -76,6 +84,7 @@ class Runner {
         // clouds
         this.cloudManager = new CloudManager(this.canvas)
         // ground
+        this.groundManager = new GroundManager(this.canvas)
         // obstacles
         // distance meter
         // draw t-rex
@@ -125,15 +134,34 @@ class Runner {
         const now = performance.now() / 1000 // s
         const deltaTime = now - (this.time || now)
         this.time = now
-        const deltadDistance = this.currentSpeed * deltaTime
 
         this.handleKey()
         if (this.isPlay) {
-            this.canvasCtx.clearRect(0, 0, this.config.WIDTH, this.config.HEIGHT)
+            this.canvasCtx.clearRect(
+                0,
+                0,
+                this.config.WIDTH,
+                this.config.HEIGHT
+            )
             // draw
             this.drawBackGround()
-            this.cloudManager.update(-1 * deltadDistance)
+            this.cloudManager.update(deltaTime, this.currentSpeed)
+            this.groundManager.update(deltaTime, this.currentSpeed)
             this.tRex.update(deltaTime)
+
+            // distance update
+            this.distanceRan += this.currentSpeed * deltaTime
+            // speed update
+            this.accelerationTime += deltaTime
+            if (
+                this.currentSpeed < this.config.MAX_SPEED &&
+                this.accelerationTime >= this.config.ACCELERATION_INTERVAL
+            ) {
+                this.currentSpeed +=
+                    this.config.ACCELERATION *
+                    (this.accelerationTime / this.config.ACCELERATION_INTERVAL)
+                this.accelerationTime = 0
+            }
         }
 
         if (!this.updatePending) {
@@ -144,6 +172,9 @@ class Runner {
 
     restart() {
         this.isPlay = true
+        this.distanceRan = 0
+        this.time = performance.now() / 1000
+        this.accelerationTime = 0
         this.keyMap.clear()
     }
 
