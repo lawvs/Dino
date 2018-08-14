@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+    - node
+cache:
+    directories:
+        - node_modules
+install:
+    - npm install
+script:
+    - npm run build
+deploy:
+    provider: pages
+    github_token: $GITHUB_TOKEN
+    skip-cleanup: true
+    keep-history: false
+    local-dir: build
+    on:
+        branch: master
