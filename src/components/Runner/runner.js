@@ -42,7 +42,7 @@ class Runner {
         WIDTH: 600,
         HEIGHT: 150,
         BG_COLOR: '', // canvas background
-        INIT_SPEED: 200, // pixel/s
+        INIT_SPEED: 300, // pixel/s
         ACCELERATION: 5,
         ACCELERATION_INTERVAL: 1, // s
         MAX_SPEED: 800,
@@ -148,7 +148,8 @@ class Runner {
             this.cloudManager.update(deltaTime, this.currentSpeed)
             this.groundManager.update(deltaTime, this.currentSpeed)
             this.tRex.update(deltaTime)
-
+            // check collision
+            this.checkCollision() && (this.isPlay = false)
             // distance update
             this.distanceRan += this.currentSpeed * deltaTime
             // speed update
@@ -164,10 +165,20 @@ class Runner {
             }
         }
 
+        if (!this.isPlay) {
+            // TODO draw restart icon
+        }
+
         if (!this.updatePending) {
             this.updatePending = true
             this.reqId = requestAnimationFrame(this.update.bind(this))
         }
+    }
+
+    checkCollision() {
+        return this.groundManager.obstacleList.some(obstacle =>
+            obstacle.isOverlap(this.tRex)
+        )
     }
 
     restart() {
@@ -176,6 +187,10 @@ class Runner {
         this.time = performance.now() / 1000
         this.accelerationTime = 0
         this.keyMap.clear()
+
+        // reset
+        this.cloudManager.reset()
+        this.groundManager.reset()
     }
 
     drawBackGround() {

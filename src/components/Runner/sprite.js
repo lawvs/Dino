@@ -82,6 +82,20 @@ class Sprite {
             this.yPos <= this.canvas.height
         )
     }
+
+    /**
+     * check if the sprite overlap with rectangle
+     * @param {Sprite} sprite
+     * @return {boolean}
+     */
+    isOverlap(sprite) {
+        return (
+            this.xPos < sprite.xPos + sprite.img.width &&
+            this.xPos + this.img.width > sprite.xPos &&
+            this.yPos < sprite.yPos + sprite.img.height &&
+            this.yPos + this.img.height > sprite.yPos
+        )
+    }
 }
 
 export default Sprite
