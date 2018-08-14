@@ -3,12 +3,20 @@
 import cloudImg from './images/cloud.png'
 import tRexImg from './images/trex.png'
 import groundImg from './images/ground.png'
+import cactusSmallImg from './images/cactus_small.png'
+import cactusLargeImg from './images/cactus_large.png'
 
 /**
  * URL to load
  * @type {string[]} img url array
  */
-const imageArray = [cloudImg, tRexImg, groundImg]
+const imageArray = [
+    cloudImg,
+    tRexImg,
+    groundImg,
+    cactusSmallImg,
+    cactusLargeImg,
+]
 
 /**
  * @type {Map<string, HTMLImageElement>}

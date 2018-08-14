@@ -1,5 +1,8 @@
 // @ts-check
+import { random } from 'lodash'
+
 import Ground from './ground'
+import Obstacle from './obstacle'
 
 class GroundManager {
     /** @type {!HTMLCanvasElement} */
@@ -10,9 +13,21 @@ class GroundManager {
     groundList = []
     /** @type {?Ground} */
     lastGround
-    /** @type {{GROUND_CONFIG: object}} */
+    /** @type {Obstacle[]} */
+    obstacleList = []
+    /** @type {number} */
+    gameTime
+    /** @type {number} */
+    currentGap
+    /** @type {{BUFFER_TIME: number, GROUND_CONFIG: object, MAX_OBSTACLE_GAP: number, MIN_OBSTACLE_GAP: number, OBSTACLE_CONFIG: object}} */
     config = {
+        BUFFER_TIME: 2, //no obstacles time(second) when game start
         GROUND_CONFIG: {},
+        MAX_OBSTACLE_GAP: null,
+        MIN_OBSTACLE_GAP: null,
+        OBSTACLE_CONFIG: {
+            X_POS: null,
+        },
     }
 
     /**
@@ -31,27 +46,45 @@ class GroundManager {
             ...this.config,
             ...options,
         }
+
+        this.config.OBSTACLE_CONFIG.X_POS = this.canvas.width
+        this.config.MAX_OBSTACLE_GAP = this.canvas.width / 0.5
+        this.config.MIN_OBSTACLE_GAP = this.canvas.width / 2
     }
 
     /**
-     * @param {number} [deltaTime]
-     * @param {number} [speed]
+     * @param {number} deltaTime
+     * @param {number} speed
      */
     update(deltaTime, speed) {
+        this.gameTime += deltaTime
+        // ground
         this.groundList = this.groundList.filter(
             ground => ground && !ground.remove
         )
         this.groundList.forEach(ground => ground.update(deltaTime, speed))
-
+        // add ground
         while (
-            this.lastGround === undefined ||
+            !this.lastGround ||
             this.lastGround.xPos + this.lastGround.img.width <=
                 this.canvas.width
         ) {
             this.addGround(this.config.GROUND_CONFIG)
         }
+
+        // obstacle
+        if (this.needToAddObstacle()) {
+            this.addObstacle(this.config.OBSTACLE_CONFIG)
+        }
+        this.obstacleList = this.obstacleList.filter(
+            obstacle => obstacle && !obstacle.remove
+        )
+        this.obstacleList.forEach(obstacle => obstacle.update(deltaTime, speed))
     }
 
+    /**
+     * @param {object} [options={}]
+     */
     addGround(options = {}) {
         const ground = new Ground(this.canvas, options)
         if (this.lastGround) {
@@ -61,9 +94,44 @@ class GroundManager {
         this.lastGround = ground
     }
 
+    /**
+     * @param {object} [options={}]
+     */
+    addObstacle(options = {}) {
+        const obstacle = new Obstacle(this.canvas, options)
+        this.obstacleList.push(obstacle)
+        this.currentGap = random(
+            this.config.MIN_OBSTACLE_GAP,
+            this.config.MAX_OBSTACLE_GAP
+        )
+    }
+
+    /**
+     * @return {boolean}
+     */
+    needToAddObstacle() {
+        if (this.gameTime < this.config.BUFFER_TIME) {
+            return false
+        }
+        const lastObstacle = this.obstacleList.slice(-1)[0]
+        if (!lastObstacle) {
+            return true
+        }
+        if (
+            this.canvas.width - lastObstacle.xPos + lastObstacle.img.width >
+            this.currentGap
+        ) {
+            return true
+        }
+        return false
+    }
+
     reset() {
+        this.gameTime = 0
         this.groundList = []
         this.lastGround = null
+        this.obstacleList = []
+        this.currentGap = 0
     }
 }
 
