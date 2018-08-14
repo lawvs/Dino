@@ -20,8 +20,8 @@ class Trex extends Sprite {
         X_POS: null,
         Y_POS: null,
         GROUND_HEIGHT: 20,
-        GRAVITY: 1500,
-        JUMP_SPEED: 450,
+        GRAVITY: 2000,
+        JUMP_SPEED: 550,
     }
 
     /**
@@ -38,7 +38,7 @@ class Trex extends Sprite {
         this.xPos = this.config.X_POS || 0
         this.groundY =
             this.canvas.height - this.img.height - this.config.GROUND_HEIGHT
-        this.yPos = this.groundY
+        this.yPos = this.config.Y_POS || this.groundY
     }
 
     /**
