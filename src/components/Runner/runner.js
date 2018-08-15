@@ -84,11 +84,12 @@ class Runner {
         // clouds
         this.cloudManager = new CloudManager(this.canvas)
         // ground
-        this.groundManager = new GroundManager(this.canvas)
         // obstacles
+        this.groundManager = new GroundManager(this.canvas)
         // distance meter
         // draw t-rex
         this.tRex = new Trex(this.canvas)
+        this.tRex.drawFirstFrame() // first frame
 
         this.outerContainerEl.appendChild(this.canvas)
         this.startListening()

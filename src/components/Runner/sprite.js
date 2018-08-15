@@ -26,10 +26,7 @@ class Sprite {
         }
         this.config.IMG_SRC = castArray(this.config.IMG_SRC)
         const sampleSrc = sample(this.config.IMG_SRC)
-        this._img = imageMap.get(sampleSrc)
-        if (!this._img) {
-            throw new Error(`load image fail! IMG_SRC: ${sampleSrc}`)
-        }
+        this._img = this.loadImg(sampleSrc)
         return this._img
     }
 
@@ -56,9 +53,13 @@ class Sprite {
         this.canvasCtx = this.canvas.getContext('2d')
     }
 
-    draw() {
+    /**
+     * draw img on the canvas
+     * @param {HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap} [img = this.img]
+     */
+    draw(img = this.img) {
         this.canvasCtx.save()
-        this.canvasCtx.drawImage(this.img, this.xPos, this.yPos)
+        this.canvasCtx.drawImage(img, this.xPos, this.yPos)
         this.canvasCtx.restore()
     }
 
@@ -95,6 +96,19 @@ class Sprite {
             this.yPos < sprite.yPos + sprite.img.height &&
             this.yPos + this.img.height > sprite.yPos
         )
+    }
+
+    /**
+     * load img from imageMap
+     * @param {string} src img src
+     * @return {HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap}
+     */
+    loadImg(src) {
+        const img = imageMap.get(src)
+        if (!img) {
+            throw new Error(`load image fail! IMG_SRC: ${src}`)
+        }
+        return img
     }
 }
 

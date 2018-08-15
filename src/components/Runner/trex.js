@@ -2,6 +2,7 @@
 /// <reference path='./index.d.ts'/>
 import Sprite from './sprite'
 import defaultTrexImg from './images/trex.png'
+import tRexFistFrameImg from './images/trex_first_frame.png'
 
 class Trex extends Sprite {
     /** @type {number} */
@@ -13,15 +14,17 @@ class Trex extends Sprite {
 
     /**
      * object config
-     * @type {{IMG_SRC: Array | string, X_POS: number, Y_POS: number, GROUND_HEIGHT: number, GRAVITY: number, JUMP_SPEED: number}}
+     * @type {{FIRST_FRAME_IMG: string, IMG_SRC: Array | string, X_POS: number, Y_POS: number, GROUND_HEIGHT: number, GRAVITY: number, JUMP_SPEED: number, SPEED: number}}
      */
     config = {
+        FIRST_FRAME_IMG: tRexFistFrameImg,
         IMG_SRC: defaultTrexImg,
-        X_POS: null,
+        X_POS: 20,
         Y_POS: null,
         GROUND_HEIGHT: 20,
         GRAVITY: 2000,
         JUMP_SPEED: 550,
+        SPEED: 70, // move when you start the game for the first time
     }
 
     /**
@@ -35,17 +38,23 @@ class Trex extends Sprite {
             ...this.config,
             ...options,
         }
-        this.xPos = this.config.X_POS || 0
+        this.xPos = 0
         this.groundY =
             this.canvas.height - this.img.height - this.config.GROUND_HEIGHT
         this.yPos = this.config.Y_POS || this.groundY
     }
 
     /**
-     * update the cloud position
+     * update position
      * @param {number} [deltaTime = 1 / 16]
      */
     update(deltaTime = 1 / 16) {
+        if (!this.isJump && this.xPos < this.config.X_POS) {
+            this.xPos += this.config.SPEED * deltaTime
+            if (this.xPos > this.config.X_POS) {
+                this.xPos = this.config.X_POS
+            }
+        }
         // jump
         if (this.isJump) {
             this.yPos -= this.jumpVelocity * deltaTime
@@ -68,6 +77,11 @@ class Trex extends Sprite {
         }
         this.isJump = true
         this.jumpVelocity = speed
+    }
+
+    drawFirstFrame() {
+        super.draw(this.loadImg(this.config.FIRST_FRAME_IMG))
+        super.draw(this.loadImg(this.config.IMG_SRC[0]))
     }
 }
 

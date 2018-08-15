@@ -2,6 +2,7 @@
 /// <reference path='./index.d.ts'/>
 import cloudImg from './images/cloud.png'
 import tRexImg from './images/trex.png'
+import tRexFistFrameImg from './images/trex_first_frame.png'
 import groundImg from './images/ground.png'
 import cactusSmallImg from './images/cactus_small.png'
 import cactusLargeImg from './images/cactus_large.png'
@@ -13,6 +14,7 @@ import cactusLargeImg from './images/cactus_large.png'
 const imageArray = [
     cloudImg,
     tRexImg,
+    tRexFistFrameImg,
     groundImg,
     cactusSmallImg,
     cactusLargeImg,
