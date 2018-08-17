@@ -1,5 +1,7 @@
 # Dino
 
+[![Build Status](https://travis-ci.org/lawvs/Dino.svg?branch=master)](https://travis-ci.org/lawvs/Dino)
+
 ## introduction
 
 T-Rex Runner.
