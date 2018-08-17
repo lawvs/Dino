@@ -55,9 +55,12 @@ class Sprite {
 
     /**
      * draw img on the canvas
-     * @param {HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap} [img = this.img]
+     * @param {String | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap} [img = this.img]
      */
     draw(img = this.img) {
+        if (typeof img === 'string') {
+            img = this.loadImg(img)
+        }
         this.canvasCtx.save()
         this.canvasCtx.drawImage(img, this.xPos, this.yPos)
         this.canvasCtx.restore()

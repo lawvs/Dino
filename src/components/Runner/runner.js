@@ -43,7 +43,7 @@ class Runner {
         HEIGHT: 150,
         BG_COLOR: '', // canvas background
         INIT_SPEED: 300, // pixel/s
-        ACCELERATION: 5,
+        ACCELERATION: 7,
         ACCELERATION_INTERVAL: 1, // s
         MAX_SPEED: 800,
         // event.code
@@ -89,7 +89,7 @@ class Runner {
         // distance meter
         // draw t-rex
         this.tRex = new Trex(this.canvas)
-        this.tRex.drawFirstFrame() // first frame
+        this.tRex.draw() // first frame
 
         this.outerContainerEl.appendChild(this.canvas)
         this.startListening()
@@ -144,13 +144,16 @@ class Runner {
                 this.config.WIDTH,
                 this.config.HEIGHT
             )
+            // check collision
+            if (this.checkCollision()) {
+                this.tRex.crash()
+                this.isPlay = false
+            }
             // draw
             this.drawBackGround()
             this.cloudManager.update(deltaTime, this.currentSpeed)
             this.groundManager.update(deltaTime, this.currentSpeed)
             this.tRex.update(deltaTime)
-            // check collision
-            this.checkCollision() && (this.isPlay = false)
             // distance update
             this.distanceRan += this.currentSpeed * deltaTime
             // speed update

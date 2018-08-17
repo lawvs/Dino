@@ -1,8 +1,12 @@
 // @ts-check
 /// <reference path='./index.d.ts'/>
-import cloudImg from './images/cloud.png'
 import tRexImg from './images/trex.png'
 import tRexFistFrameImg from './images/trex_first_frame.png'
+import tRexDuck1Img from './images/trex_duck_1.png'
+import tRexDuck2Img from './images/trex_duck_2.png'
+import tRexCrashImg from './images/trex_crash.png'
+
+import cloudImg from './images/cloud.png'
 import groundImg from './images/ground.png'
 import cactusSmallImg from './images/cactus_small.png'
 import cactusLargeImg from './images/cactus_large.png'
@@ -18,6 +22,9 @@ const imageArray = [
     groundImg,
     cactusSmallImg,
     cactusLargeImg,
+    tRexDuck1Img,
+    tRexDuck2Img,
+    tRexCrashImg,
 ]
 
 /**
