@@ -166,6 +166,9 @@ class Runner {
                     this.config.ACCELERATION *
                     (this.accelerationTime / this.config.ACCELERATION_INTERVAL)
                 this.accelerationTime = 0
+                if (this.currentSpeed > this.config.MAX_SPEED) {
+                    this.currentSpeed = this.config.MAX_SPEED
+                }
             }
         }
 
@@ -188,6 +191,7 @@ class Runner {
     restart() {
         this.isPlay = true
         this.distanceRan = 0
+        this.currentSpeed = this.config.INIT_SPEED
         this.time = performance.now() / 1000
         this.accelerationTime = 0
         this.keyMap.clear()
