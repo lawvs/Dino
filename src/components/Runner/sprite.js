@@ -1,7 +1,7 @@
 // @ts-check
 import { castArray, sample } from 'lodash'
 
-import imageMap from './imageLoader'
+import loadImg from './imageLoader'
 
 class Sprite {
     /** @type {!HTMLCanvasElement} */
@@ -26,7 +26,7 @@ class Sprite {
         }
         this.config.IMG_SRC = castArray(this.config.IMG_SRC)
         const sampleSrc = sample(this.config.IMG_SRC)
-        this._img = this.loadImg(sampleSrc)
+        this._img = loadImg(sampleSrc)
         return this._img
     }
 
@@ -59,7 +59,7 @@ class Sprite {
      */
     draw(img = this.img) {
         if (typeof img === 'string') {
-            img = this.loadImg(img)
+            img = loadImg(img)
         }
         this.canvasCtx.save()
         this.canvasCtx.drawImage(img, this.xPos, this.yPos)
@@ -99,19 +99,6 @@ class Sprite {
             this.yPos < sprite.yPos + sprite.img.height &&
             this.yPos + this.img.height > sprite.yPos
         )
-    }
-
-    /**
-     * load img from imageMap
-     * @param {string} src img src
-     * @return {HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap}
-     */
-    loadImg(src) {
-        const img = imageMap.get(src)
-        if (!img) {
-            throw new Error(`load image fail! IMG_SRC: ${src}`)
-        }
-        return img
     }
 }
 

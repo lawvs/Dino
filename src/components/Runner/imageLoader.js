@@ -32,6 +32,9 @@ const imageArray = [
  */
 const imageMap = new Map()
 
+/**
+ * @type {promise[]}
+ */
 const promiseArray = imageArray.map(imgUrl => {
     const promise = new Promise((resolve, reject) => {
         const img = new Image()
@@ -49,4 +52,15 @@ export function loadImages() {
     return Promise.all(promiseArray)
 }
 
-export default imageMap
+/**
+ * load img from imageMap
+ * @param {string} src img src
+ * @return {HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap}
+ */
+export default function getImg(src) {
+    const img = imageMap.get(src)
+    if (!img) {
+        throw new Error(`load image fail! IMG_SRC: ${src}`)
+    }
+    return img
+}
