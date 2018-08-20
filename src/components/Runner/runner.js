@@ -126,9 +126,10 @@ class Runner {
 
     handleKey() {
         this.keyMap.forEach((value, key) => {
+            const status = this.status
             switch (key) {
             case this.config.KEYCODE_JUMP:
-                if (this.status !== STATUS.RUNNING) {
+                if (status !== STATUS.RUNNING) {
                     this.restart()
                 }
                 this.tRex.jump()
@@ -157,8 +158,7 @@ class Runner {
             )
             // check collision
             if (this.checkCollision()) {
-                this.tRex.crash()
-                this.status = STATUS.CRASH
+                this.gameOver()
             }
             // draw
             this.drawBackGround()
@@ -183,10 +183,6 @@ class Runner {
             }
         }
 
-        if (this.status === STATUS.CRASH) {
-            this.drawRestartButton()
-        }
-
         if (!this.updatePending) {
             this.updatePending = true
             this.reqId = requestAnimationFrame(this.update.bind(this))
@@ -200,7 +196,6 @@ class Runner {
     }
 
     restart() {
-        this.status = STATUS.RUNNING
         this.distanceRan = 0
         this.currentSpeed = this.config.INIT_SPEED
         this.time = performance.now() / 1000
@@ -208,8 +203,18 @@ class Runner {
         this.keyMap.clear()
 
         // reset
+        if (this.status === STATUS.CRASH) {
+            this.tRex.start()
+        }
         this.cloudManager.reset()
         this.groundManager.reset()
+        this.status = STATUS.RUNNING
+    }
+
+    gameOver() {
+        this.tRex.crash()
+        this.status = STATUS.CRASH
+        this.drawRestartButton()
     }
 
     drawBackGround() {

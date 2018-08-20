@@ -140,6 +140,10 @@ class Trex extends Sprite {
     crash() {
         this.status = STATUS.CRASH
     }
+
+    start() {
+        this.status = STATUS.JUMP
+    }
 }
 
 export default Trex
