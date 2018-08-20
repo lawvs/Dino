@@ -1,8 +1,18 @@
 // @ts-check
 import CloudManager from './cloudManager'
-import { loadImages } from './imageLoader'
+import getImg, { loadImages } from './imageLoader'
 import Trex from './trex'
 import GroundManager from './groundManager'
+import restartButtonImg from './images/restart_button.png'
+
+/**
+ * @readonly
+ */
+const STATUS = {
+    START: Symbol('START'),
+    RUNNING: Symbol('RUNNING'),
+    CRASH: Symbol('CRASH'),
+}
 
 /**
  * T-Rex runner.
@@ -29,14 +39,14 @@ class Runner {
     time
     /** @type {number} for speed update /second */
     accelerationTime = 0
-    /** @type {boolean} */
-    isPlay = false
+    /** @type {symbol} */
+    status = STATUS.START
     /** @type {number} */
     distanceRan = 0
     /** @type {Map} */
     keyMap = new Map()
 
-    /** @type {{ID: string, WIDTH: number, HEIGHT: number, BG_COLOR: string, INIT_SPEED: number, ACCELERATION: number, ACCELERATION_INTERVAL: number, MAX_SPEED: number, KEYCODE_JUMP: string}} */
+    /** @type {{ID: string, WIDTH: number, HEIGHT: number, BG_COLOR: string, INIT_SPEED: number, ACCELERATION: number, ACCELERATION_INTERVAL: number, MAX_SPEED: number, KEYCODE_JUMP: string, RESTART_BUTTON_SRC: string}} */
     config = {
         ID: '', // canvas id
         WIDTH: 600,
@@ -48,6 +58,7 @@ class Runner {
         MAX_SPEED: 800,
         // event.code
         KEYCODE_JUMP: 'Space',
+        RESTART_BUTTON_SRC: restartButtonImg,
     }
 
     /**
@@ -117,7 +128,7 @@ class Runner {
         this.keyMap.forEach((value, key) => {
             switch (key) {
             case this.config.KEYCODE_JUMP:
-                if (!this.isPlay) {
+                if (this.status !== STATUS.RUNNING) {
                     this.restart()
                 }
                 this.tRex.jump()
@@ -137,7 +148,7 @@ class Runner {
         this.time = now
 
         this.handleKey()
-        if (this.isPlay) {
+        if (this.status === STATUS.RUNNING) {
             this.canvasCtx.clearRect(
                 0,
                 0,
@@ -147,7 +158,7 @@ class Runner {
             // check collision
             if (this.checkCollision()) {
                 this.tRex.crash()
-                this.isPlay = false
+                this.status = STATUS.CRASH
             }
             // draw
             this.drawBackGround()
@@ -172,8 +183,8 @@ class Runner {
             }
         }
 
-        if (!this.isPlay) {
-            // TODO draw restart icon
+        if (this.status === STATUS.CRASH) {
+            this.drawRestartButton()
         }
 
         if (!this.updatePending) {
@@ -189,7 +200,7 @@ class Runner {
     }
 
     restart() {
-        this.isPlay = true
+        this.status = STATUS.RUNNING
         this.distanceRan = 0
         this.currentSpeed = this.config.INIT_SPEED
         this.time = performance.now() / 1000
@@ -207,6 +218,17 @@ class Runner {
             this.canvasCtx.fillStyle = BG_COLOR
             this.canvasCtx.fillRect(0, 0, WIDTH, HEIGHT)
         }
+    }
+
+    drawRestartButton() {
+        const img = getImg(this.config.RESTART_BUTTON_SRC)
+        this.canvasCtx.save()
+        this.canvasCtx.drawImage(
+            img,
+            this.canvas.width / 2 - img.width / 2,
+            this.canvas.height / 2 - img.height / 2
+        )
+        this.canvasCtx.restore()
     }
 }
 

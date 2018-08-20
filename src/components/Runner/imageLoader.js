@@ -10,6 +10,7 @@ import cloudImg from './images/cloud.png'
 import groundImg from './images/ground.png'
 import cactusSmallImg from './images/cactus_small.png'
 import cactusLargeImg from './images/cactus_large.png'
+import restartButtonImg from './images/restart_button.png'
 
 /**
  * URL to load
@@ -25,6 +26,7 @@ const imageArray = [
     tRexDuck1Img,
     tRexDuck2Img,
     tRexCrashImg,
+    restartButtonImg,
 ]
 
 /**
