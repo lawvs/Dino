@@ -1,4 +1,6 @@
 {
     "No internet connection": "未连接到互联网",
-    "Try:": "请试试以下办法："
+    "Try": "请试试以下办法：",
+    "Checking the network cables, modem and router": "检查网线、调制解调器和路由器",
+    "Reconnecting to Wi-Fi": "重新连接到 Wi-Fi 网络"
 }

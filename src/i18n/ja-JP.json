@@ -1,4 +1,6 @@
 {
     "No internet connection": "インターネットに接続されていません",
-    "Try:": "次をお試しください:"
+    "Try": "次をお試しください:",
+    "Checking the network cables, modem and router": "ネットワーク ケーブル、モデム、ルーターを確認する",
+    "Reconnecting to Wi-Fi": "Wi-Fi に再度接続する"
 }

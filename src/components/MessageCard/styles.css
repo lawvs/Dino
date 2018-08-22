@@ -12,3 +12,9 @@
   font-weight: normal;
   word-wrap: break-word;
 }
+
+.error-code {
+  color: #646464;
+  font-size: 0.8em;
+  text-transform: uppercase;
+}
