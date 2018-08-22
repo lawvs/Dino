@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 
-import { Runner } from '../Runner'
 import './styles.css'
 
 
@@ -12,11 +11,12 @@ class App extends Component {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const config = {
             id: 'runner',
             width: this.outerContainerEl.offsetWidth,
         }
+        const {Runner} = await import('../Runner')
         const runner = new Runner(this.outerContainerEl, config)
         runner.init()
     }
