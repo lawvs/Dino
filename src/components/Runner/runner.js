@@ -115,7 +115,7 @@ class Runner {
     /** @param {KeyboardEvent} e */
     onKeyDown(e) {
         this.keyMap.set(e.code, true)
-        event.preventDefault()
+        e.preventDefault()
     }
 
     /** @param {KeyboardEvent} e */
