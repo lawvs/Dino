@@ -29,7 +29,6 @@ const language = standardizeLocale(navigator.language)
 const i18next = createInstance()
 i18next.use(reactI18nextModule).init({
     lng: language,
-    debug: true,
     resources: mainRes,
 })
 
