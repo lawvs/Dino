@@ -7,11 +7,12 @@ import './styles.css'
 class App extends Component {
     render() {
         return (
-            <div className='container'>
-                <div className='wrapper'>
+            <div className="container">
+                <div>
                     <Game />
                     <MessageCard />
                 </div>
+                <div /> {/* placeholder */}
             </div>
         )
     }

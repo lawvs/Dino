@@ -24,7 +24,7 @@ class App extends Component {
         return (
             <div
                 ref={node => (this.outerContainerEl = node)}
-                className="runnerwrapper"
+                className="runner-wrapper"
             />
         )
     }
