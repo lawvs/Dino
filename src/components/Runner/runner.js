@@ -44,8 +44,8 @@ class Runner {
     status = STATUS.START
     /** @type {number} */
     distanceRan = 0
-    /** @type {Map} */
-    keyMap = new Map()
+    /** @type {number} */
+    restartLock = -1
 
     /** @type {{ID: string, WIDTH: number, HEIGHT: number, BG_COLOR: string, INIT_SPEED: number, ACCELERATION: number, ACCELERATION_INTERVAL: number, MAX_SPEED: number, KEYCODE_JUMP: string, RESTART_BUTTON_SRC: string, GAMEOVER_TEXT_SRC: string}} */
     config = {
@@ -106,7 +106,6 @@ class Runner {
 
         this.outerContainerEl.appendChild(this.canvas)
         this.startListening()
-        this.update()
     }
 
     startListening() {
@@ -116,31 +115,27 @@ class Runner {
 
     /** @param {KeyboardEvent} e */
     onKeyDown(e) {
-        this.keyMap.set(e.code, true)
+        const { code } = e
+        switch (code) {
+        case this.config.KEYCODE_JUMP:
+            if (
+                this.status !== STATUS.RUNNING &&
+                performance.now() - this.restartLock > 500
+            ) {
+                this.restart()
+                this.update()
+            }
+            this.tRex.jump()
+            break
+        default:
+            break
+        }
         e.preventDefault()
     }
 
     /** @param {KeyboardEvent} e */
     onKeyUp(e) {
-        this.keyMap.delete(e.code)
         e.preventDefault()
-    }
-
-    handleKey() {
-        this.keyMap.forEach((value, key) => {
-            const status = this.status
-            switch (key) {
-            case this.config.KEYCODE_JUMP:
-                if (status !== STATUS.RUNNING) {
-                    this.restart()
-                }
-                this.tRex.jump()
-                break
-            default:
-                break
-            }
-        })
-        this.keyMap.clear()
     }
 
     update() {
@@ -150,7 +145,6 @@ class Runner {
         const deltaTime = now - (this.time || now)
         this.time = now
 
-        this.handleKey()
         if (this.status === STATUS.RUNNING) {
             this.canvasCtx.clearRect(
                 0,
@@ -158,15 +152,18 @@ class Runner {
                 this.config.WIDTH,
                 this.config.HEIGHT
             )
-            // check collision
-            if (this.checkCollision()) {
-                this.gameOver()
-            }
+
             // draw
             this.drawBackGround()
             this.cloudManager.update(deltaTime, this.currentSpeed)
             this.groundManager.update(deltaTime, this.currentSpeed)
             this.tRex.update(deltaTime)
+            // check collision
+            if (this.checkCollision()) {
+                this.gameOver()
+                this.tRex.draw() // update
+                return
+            }
             // distance update
             this.distanceRan += this.currentSpeed * deltaTime
             // speed update
@@ -202,7 +199,6 @@ class Runner {
         this.currentSpeed = this.config.INIT_SPEED
         this.time = performance.now() / 1000
         this.accelerationTime = 0
-        this.keyMap.clear()
 
         // reset
         if (this.status === STATUS.CRASH) {
@@ -215,6 +211,7 @@ class Runner {
 
     gameOver() {
         this.tRex.crash()
+        this.restartLock = performance.now() // ms
         this.status = STATUS.CRASH
         this.drawGameOverPanel()
     }
@@ -236,12 +233,12 @@ class Runner {
         this.canvasCtx.drawImage(
             textImg,
             this.canvas.width / 2 - textImg.width / 2,
-            this.canvas.height * 2 / 5 - textImg.height / 2
+            (this.canvas.height * 2) / 5 - textImg.height / 2
         )
         this.canvasCtx.drawImage(
             buttonImg,
             this.canvas.width / 2 - buttonImg.width / 2,
-            this.canvas.height * 3 / 5 - buttonImg.height / 2
+            (this.canvas.height * 3) / 5 - buttonImg.height / 2
         )
         this.canvasCtx.restore()
     }
