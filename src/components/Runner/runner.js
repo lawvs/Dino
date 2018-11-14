@@ -4,6 +4,7 @@ import getImg, { loadImages } from './imageLoader'
 import Trex from './trex'
 import GroundManager from './groundManager'
 import restartButtonImg from './images/restart_button.png'
+import gameoverTextImg from './images/gameover_text.png'
 
 /**
  * @readonly
@@ -46,7 +47,7 @@ class Runner {
     /** @type {Map} */
     keyMap = new Map()
 
-    /** @type {{ID: string, WIDTH: number, HEIGHT: number, BG_COLOR: string, INIT_SPEED: number, ACCELERATION: number, ACCELERATION_INTERVAL: number, MAX_SPEED: number, KEYCODE_JUMP: string, RESTART_BUTTON_SRC: string}} */
+    /** @type {{ID: string, WIDTH: number, HEIGHT: number, BG_COLOR: string, INIT_SPEED: number, ACCELERATION: number, ACCELERATION_INTERVAL: number, MAX_SPEED: number, KEYCODE_JUMP: string, RESTART_BUTTON_SRC: string, GAMEOVER_TEXT_SRC: string}} */
     config = {
         ID: '', // canvas id
         WIDTH: 600,
@@ -59,6 +60,7 @@ class Runner {
         // event.code
         KEYCODE_JUMP: 'Space',
         RESTART_BUTTON_SRC: restartButtonImg,
+        GAMEOVER_TEXT_SRC: gameoverTextImg,
     }
 
     /**
@@ -214,7 +216,7 @@ class Runner {
     gameOver() {
         this.tRex.crash()
         this.status = STATUS.CRASH
-        this.drawRestartButton()
+        this.drawGameOverPanel()
     }
 
     drawBackGround() {
@@ -225,13 +227,21 @@ class Runner {
         }
     }
 
-    drawRestartButton() {
-        const img = getImg(this.config.RESTART_BUTTON_SRC)
+    drawGameOverPanel() {
+        // game over text
+        const textImg = getImg(this.config.GAMEOVER_TEXT_SRC)
+        // restart button
+        const buttonImg = getImg(this.config.RESTART_BUTTON_SRC)
         this.canvasCtx.save()
         this.canvasCtx.drawImage(
-            img,
-            this.canvas.width / 2 - img.width / 2,
-            this.canvas.height / 2 - img.height / 2
+            textImg,
+            this.canvas.width / 2 - textImg.width / 2,
+            this.canvas.height * 2 / 5 - textImg.height / 2
+        )
+        this.canvasCtx.drawImage(
+            buttonImg,
+            this.canvas.width / 2 - buttonImg.width / 2,
+            this.canvas.height * 3 / 5 - buttonImg.height / 2
         )
         this.canvasCtx.restore()
     }
