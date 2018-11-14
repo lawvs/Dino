@@ -130,7 +130,7 @@ class Trex extends Sprite {
      * @param {number} [speed=this.config.JUMP_SPEED]
      */
     jump(speed = this.config.JUMP_SPEED) {
-        if (this.status === STATUS.JUMP) {
+        if (this.status === STATUS.JUMP || this.status === STATUS.CRASH) {
             return
         }
         this.status = STATUS.JUMP
@@ -139,6 +139,8 @@ class Trex extends Sprite {
 
     crash() {
         this.status = STATUS.CRASH
+        // landing
+        this.jumpVelocity = -1 * Math.abs(this.jumpVelocity)
     }
 
     start() {
