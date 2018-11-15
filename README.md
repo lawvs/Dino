@@ -1,4 +1,7 @@
-# Dino
+<p align="center">
+<img src="https://user-images.githubusercontent.com/18554747/48544260-2bdc5f80-e8fe-11e8-8555-34edaf3a6d9c.png" alt="Dino">
+</p>
+<h1 align="center">Dino</h1>
 
 [![Build Status](https://travis-ci.org/lawvs/Dino.svg?branch=master)](https://travis-ci.org/lawvs/Dino)
 
