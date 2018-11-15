@@ -111,6 +111,7 @@ class Runner {
     startListening() {
         document.addEventListener('keydown', e => this.onKeyDown(e))
         // document.addEventListener('keyup', e => this.onKeyUp(e))
+        this.canvas.addEventListener('click', e => this.onClick(e))
     }
 
     /** @param {KeyboardEvent} e */
@@ -120,10 +121,9 @@ class Runner {
         case this.config.KEYCODE_JUMP:
             if (
                 this.status !== STATUS.RUNNING &&
-                performance.now() - this.restartLock > 500
+                    performance.now() - this.restartLock > 500
             ) {
                 this.restart()
-                this.update()
             }
             this.tRex.jump()
             break
@@ -135,6 +135,16 @@ class Runner {
 
     /** @param {KeyboardEvent} e */
     onKeyUp(e) {
+        e.preventDefault()
+    }
+
+    /** @param {MouseEvent} e */
+    onClick(e) {
+        if (this.status === STATUS.CRASH) {
+            // const x = e.pageX - this.canvas.offsetLeft
+            // const y = e.pageY - this.canvas.offsetTop
+            this.restart()
+        }
         e.preventDefault()
     }
 
@@ -157,13 +167,13 @@ class Runner {
             this.drawBackGround()
             this.cloudManager.update(deltaTime, this.currentSpeed)
             this.groundManager.update(deltaTime, this.currentSpeed)
-            this.tRex.update(deltaTime)
             // check collision
             if (this.checkCollision()) {
                 this.gameOver()
                 this.tRex.draw() // update
                 return
             }
+            this.tRex.update(deltaTime)
             // distance update
             this.distanceRan += this.currentSpeed * deltaTime
             // speed update
@@ -207,6 +217,7 @@ class Runner {
         this.cloudManager.reset()
         this.groundManager.reset()
         this.status = STATUS.RUNNING
+        this.update()
     }
 
     gameOver() {
