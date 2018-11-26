@@ -3,6 +3,7 @@ import CloudManager from './cloudManager'
 import getImg, { loadImages } from './imageLoader'
 import Trex from './trex'
 import GroundManager from './groundManager'
+import DistanceMeter from './distanceMeter'
 import restartButtonImg from './images/restart_button.png'
 import gameoverTextImg from './images/gameover_text.png'
 
@@ -100,6 +101,7 @@ class Runner {
         // obstacles
         this.groundManager = new GroundManager(this.canvas)
         // distance meter
+        this.distanceMeter = new DistanceMeter(this.canvas)
         // draw t-rex
         this.tRex = new Trex(this.canvas)
         this.tRex.draw() // first frame
@@ -173,6 +175,7 @@ class Runner {
                 this.tRex.draw() // update
                 return
             }
+            this.distanceMeter.update(this.distanceRan)
             this.tRex.update(deltaTime)
             // distance update
             this.distanceRan += this.currentSpeed * deltaTime
@@ -224,6 +227,7 @@ class Runner {
         this.tRex.crash()
         this.restartLock = performance.now() // ms
         this.status = STATUS.CRASH
+        this.distanceMeter.updateHighScore()
         this.drawGameOverPanel()
     }
 
