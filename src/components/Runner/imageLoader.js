@@ -12,6 +12,7 @@ import cactusSmallImg from './images/cactus_small.png'
 import cactusLargeImg from './images/cactus_large.png'
 import restartButtonImg from './images/restart_button.png'
 import gameoverTextImg from './images/gameover_text.png'
+import scoreNumberImg from './images/score_number.png'
 
 /**
  * URL to load
@@ -29,6 +30,7 @@ const imageArray = [
     tRexCrashImg,
     restartButtonImg,
     gameoverTextImg,
+    scoreNumberImg,
 ]
 
 /**
