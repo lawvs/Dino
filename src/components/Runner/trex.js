@@ -6,6 +6,8 @@ import tRexFistFrameImg from './images/trex_first_frame.png'
 import tRexDuck1Img from './images/trex_duck_1.png'
 import tRexDuck2Img from './images/trex_duck_2.png'
 import tRexCrashImg from './images/trex_crash.png'
+import jumpSound from './sounds/button-press.mp3'
+import hitSound from './sounds/hit.mp3'
 
 /**
  * trex status enum
@@ -31,10 +33,12 @@ class Trex extends Sprite {
     status
     /** @type {number} */
     duckTime = 0
+    /** @type {Map<string, HTMLAudioElement>} */
+    audioMap = new Map()
 
     /**
      * object config
-     * @type {{IMG_SRC: Array | string, STATUS: object, DUCK_INTERVAL: number, X_POS: number, Y_POS: number, GROUND_HEIGHT: number, GRAVITY: number, JUMP_SPEED: number, SPEED: number}}
+     * @type {{IMG_SRC: Array | string, STATUS: object, DUCK_INTERVAL: number, X_POS: number, Y_POS: number, GROUND_HEIGHT: number, GRAVITY: number, JUMP_SPEED: number, SPEED: number, SOUNDS: object}}
      */
     config = {
         IMG_SRC: defaultTrexImg,
@@ -52,6 +56,10 @@ class Trex extends Sprite {
         GRAVITY: 2000,
         JUMP_SPEED: 550,
         SPEED: 70, // move when you start the game for the first time
+        SOUNDS: {
+            JUMP: jumpSound,
+            HIT: hitSound,
+        },
     }
 
     /**
@@ -65,6 +73,7 @@ class Trex extends Sprite {
             ...this.config,
             ...options,
         }
+        this.loadSounds()
         this.xPos = 0
         this.groundY =
             this.canvas.height - this.img.height - this.config.GROUND_HEIGHT
@@ -135,16 +144,39 @@ class Trex extends Sprite {
         }
         this.status = STATUS.JUMP
         this.jumpVelocity = speed
+        this.playSound(this.config.SOUNDS.JUMP)
     }
 
     crash() {
         this.status = STATUS.CRASH
         // landing
         this.jumpVelocity = -1 * Math.abs(this.jumpVelocity)
+        this.playSound(this.config.SOUNDS.HIT)
     }
 
     start() {
         this.status = STATUS.JUMP
+    }
+
+    loadSounds() {
+        Object.values(this.config.SOUNDS)
+            .forEach(src => {
+                const audio = new Audio(src)
+                this.audioMap.set(src, audio)
+            })
+    }
+
+    /**
+     * play audio
+     * @param {string} sound
+     */
+    playSound(sound) {
+        const audio = this.audioMap.get(sound)
+        // HTMLMediaElement.readyState
+        if (!audio || audio.readyState !== 4) {
+            return
+        }
+        audio.play()
     }
 }
 
