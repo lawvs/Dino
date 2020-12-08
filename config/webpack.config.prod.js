@@ -175,7 +175,7 @@ module.exports = {
                   plugins: () => [
                     require('postcss-flexbugs-fixes'),
                     autoprefixer({
-                      browsers: [
+                      overrideBrowserslist: [
                         '>1%',
                         'last 4 versions',
                         'Firefox ESR',
@@ -214,16 +214,13 @@ module.exports = {
     minimizer: [
       new UglifyJsPlugin({
         uglifyOptions: {
-          compress: {
           warnings: false,
+          compress: {
           // Disabled because of an issue with Uglify breaking seemingly valid code:
           // https://github.com/facebookincubator/create-react-app/issues/2376
           // Pending further investigation:
           // https://github.com/mishoo/UglifyJS2/issues/2011
           comparisons: false,
-        },
-        mangle: {
-          safari10: true,
         },
         output: {
           comments: false,
@@ -259,7 +256,7 @@ module.exports = {
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     // In production, it will be an empty string unless you specify "homepage"
     // in `package.json`, in which case it will be the pathname of that URL.
-    new InterpolateHtmlPlugin(env.raw),
+    new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
     // It is absolutely essential that NODE_ENV was set to production here.
