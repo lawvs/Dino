@@ -11,7 +11,7 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -211,27 +211,8 @@ module.exports = {
   },
   optimization: {
     // Minify the code.
-    minimizer: [
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          warnings: false,
-          compress: {
-          // Disabled because of an issue with Uglify breaking seemingly valid code:
-          // https://github.com/facebookincubator/create-react-app/issues/2376
-          // Pending further investigation:
-          // https://github.com/mishoo/UglifyJS2/issues/2011
-          comparisons: false,
-        },
-        output: {
-          comments: false,
-          // Turned on because emoji and regex is not minified properly using default
-          // https://github.com/facebookincubator/create-react-app/issues/2488
-          ascii_only: true,
-        },
-        sourceMap: shouldUseSourceMap,
-        }
-      })
-    ]
+    minimize: true,
+    minimizer: [new TerserPlugin()],
   },
   plugins: [
     // Generates an `index.html` file with the <script> injected.
