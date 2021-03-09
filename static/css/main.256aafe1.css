@@ -1,0 +1,51 @@
+.runner-wrapper {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+      align-items: center;
+  -ms-flex-pack: center;
+      justify-content: center;
+}
+
+.messagecard {
+  color: #333;
+  font-size: 1em;
+  line-height: 1.55;
+  width: 100%;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: 1.5em;
+  line-height: 1.25em;
+  font-weight: normal;
+  word-wrap: break-word;
+}
+
+.error-code {
+  color: #646464;
+  font-size: 0.8em;
+  text-transform: uppercase;
+}
+
+.container {
+  height: 100vh;
+  width: 100vw;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  -ms-flex-align: center;
+      align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  background-color: #f7f7f7;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+
+/*# sourceMappingURL=main.256aafe1.css.map*/
