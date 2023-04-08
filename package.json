@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "i18next": "^11.10.2",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-i18next": "^7.13.0"
