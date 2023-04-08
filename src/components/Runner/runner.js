@@ -113,7 +113,7 @@ class Runner {
     startListening() {
         document.addEventListener('keydown', e => this.onKeyDown(e))
         // document.addEventListener('keyup', e => this.onKeyUp(e))
-        this.canvas.addEventListener('click', e => this.onClick(e))
+        this.canvas.addEventListener('click', e => this.onAction())
     }
 
     /** @param {KeyboardEvent} e */
@@ -121,33 +121,21 @@ class Runner {
         const { code } = e
         switch (code) {
         case this.config.KEYCODE_JUMP:
-            if (
-                this.status !== STATUS.RUNNING &&
-                    performance.now() - this.restartLock > 500
-            ) {
-                this.restart()
-            }
-            this.tRex.jump()
+            this.onAction()
             break
         default:
             break
         }
-        e.preventDefault()
     }
 
-    /** @param {KeyboardEvent} e */
-    onKeyUp(e) {
-        e.preventDefault()
-    }
-
-    /** @param {MouseEvent} e */
-    onClick(e) {
-        if (this.status === STATUS.CRASH) {
-            // const x = e.pageX - this.canvas.offsetLeft
-            // const y = e.pageY - this.canvas.offsetTop
+    onAction() {
+        if (
+            this.status !== STATUS.RUNNING &&
+                performance.now() - this.restartLock > 500
+        ) {
             this.restart()
         }
-        e.preventDefault()
+        this.tRex.jump()
     }
 
     update() {
