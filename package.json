@@ -1,6 +1,7 @@
 {
   "name": "dino",
   "version": "1.0.0",
+  "homepage": "https://lawvs.github.io/Dino/",
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",

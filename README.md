@@ -3,6 +3,8 @@
 </p>
 <h1 align="center">Dino</h1>
 
+[![Build and Deploy](https://github.com/lawvs/Dino/actions/workflows/build.yml/badge.svg)](https://github.com/lawvs/Dino/actions/workflows/build.yml)
+
 ## introduction
 
 T-Rex Runner.
