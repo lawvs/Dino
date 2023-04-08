@@ -22,6 +22,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Upload pages artifacts
+        # https://github.com/actions/upload-pages-artifact
         uses: actions/upload-pages-artifact@v1
         with:
           path: "build/"
@@ -30,8 +31,8 @@ jobs:
     needs: build
     # if: github.ref == 'refs/heads/master'
     permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
 
     # Deploy to the github-pages environment
     environment:
@@ -42,4 +43,5 @@ jobs:
 
     steps:
       - name: Deploy to GitHub Pages
+        # https://github.com/actions/deploy-pages
         uses: actions/deploy-pages@v2.0.0
